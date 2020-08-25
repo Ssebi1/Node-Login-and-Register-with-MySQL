@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const dotenv = require('dotenv');
 dotenv.config({ path: './.env' });
 const port = 8080;
+const cookieParses = require('cookie-parser');
 
 const app = express();
 
@@ -17,6 +18,10 @@ const db = mysql.createConnection({
 const publicDirectory = path.join(__dirname, './public');
 app.use(express.static(publicDirectory));
 
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(cookieParses());
+
 app.set('view engine', 'hbs');
 
 db.connect((err) => {
@@ -29,14 +34,6 @@ app.listen(port, (err) => {
     console.log('Connected');
 });
 
-app.get('/', (req, res) => {
-    res.render('index.hbs');
-});
-
-app.get('/register', (req, res) => {
-    res.render('register.hbs');
-});
-
-app.get('/login', (req, res) => {
-    res.render('login.hbs');
-});
+//Routes
+app.use('/', require('./routes/pages'));
+app.use('/auth', require('./routes/auth'));
