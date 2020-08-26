@@ -22,7 +22,10 @@
 
     <div class="container mt-4">
         <div class="jumbotron" style="display: flex; justify-content:space-between">
-            <h1>Not logged in yet</h1>
+            <h1>Logged in as {{name}}</h1>
+            <form action="/auth/logout" method="post">
+                <button type="submit" class="btn btn-danger mt-2">Log out</button>
+            </form>
         </div>
     </div>
 

@@ -47,8 +47,9 @@ exports.register = (req, res) => {
                 (error, result) => {
                     if (error) throw error;
                     else {
-                        return res.render('register', {
-                            message: 'User registred',
+                        res.cookie('username', name);
+                        res.render('indexLogged', {
+                            name: name,
                         });
                     }
                 }
@@ -85,13 +86,18 @@ exports.login = async (req, res) => {
                     });
                 }
 
-                res.cookie('id', result[0].user_id);
                 res.cookie('username', result[0].user_name);
-                res.cookie('email', result[0].user_email);
-                res.status(200).redirect('/');
+                res.render('indexLogged', {
+                    name: result[0].user_name,
+                });
             }
         );
     } catch (error) {
         console.log(error);
     }
+};
+
+exports.logout = (req, res) => {
+    res.clearCookie('username');
+    res.redirect('/');
 };
